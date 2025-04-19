@@ -1,7 +1,7 @@
-import axios from 'axios';
+import axios, { AxiosError, AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import { API_BASE } from '../config';
 
-const axiosInstance = axios.create({
+const axiosInstance: AxiosInstance = axios.create({
 	baseURL: API_BASE,
 	headers: {
 		'Content-Type': 'application/json',
@@ -9,21 +9,21 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use(
-	(config) => {
+	(config: InternalAxiosRequestConfig) => {
 		const token = localStorage.getItem('token');
 		if (token) {
 			config.headers.Authorization = `Bearer ${token}`;
 		}
 		return config;
 	},
-	(error) => {
+	(error: AxiosError) => {
 		return Promise.reject(error);
 	}
 );
 
 axiosInstance.interceptors.response.use(
-	(response) => response,
-	(error) => {
+	(response: AxiosResponse) => response,
+	(error: AxiosError) => {
 		if (error.response?.status === 401) {
 			localStorage.removeItem('token');
 			localStorage.removeItem('user');

@@ -1,23 +1,21 @@
+import api from '@/api/api';
 import { useEffect, useState } from 'react';
 import { PostCard } from '../components/PostCard';
-import { useAuth } from '../context/AuthContext';
-import api from '../services/api';
-import { News } from '../types/api';
+import { Posts } from '../types/api.types';
 
 export const HomePage: React.FC = () => {
-	const { token } = useAuth();
-	const [posts, setPosts] = useState<News[]>([]);
+	const [posts, setPosts] = useState<Posts[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
 
 	useEffect(() => {
-		loadNews();
-	}, [token]);
+		loadPosts();
+	}, []);
 
-	const loadNews = async () => {
+	const loadPosts = async () => {
 		try {
 			setLoading(true);
-			const data = await api.news.getAll(token || undefined);
+			const data = await api.news.getAll();
 			setPosts(data);
 			setError(null);
 		} catch (err) {

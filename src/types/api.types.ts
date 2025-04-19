@@ -4,7 +4,7 @@ export interface User {
 	email: string;
 }
 
-export interface News {
+export interface Posts {
 	_id: string;
 	title: string;
 	content: string;
@@ -32,9 +32,15 @@ export interface RegisterData {
 	password: string;
 }
 
-export interface NewsCreateData {
+export interface PostsCreateData {
 	title: string;
 	content: string;
 	images?: string[];
 	attachments?: string[];
-} 
+}
+
+export interface Notification {
+	id: string;
+	message: string;
+	createdAt: string;
+}

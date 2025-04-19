@@ -1,9 +1,9 @@
+import api from '@/api/api';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Editor } from '../components/Editor';
 import { Preview } from '../components/Preview';
 import { useAuth } from '../context/AuthContext';
-import api from '../services/api';
 
 export const CreatePostPage: React.FC = () => {
 	const [title, setTitle] = useState('');
@@ -22,7 +22,7 @@ export const CreatePostPage: React.FC = () => {
 		try {
 			setLoading(true);
 			setError(null);
-			await api.news.create({ title, content }, token);
+			await api.news.create({ title, content });
 			navigate('/');
 		} catch (err) {
 			console.error('Ошибка при создании поста:', err);

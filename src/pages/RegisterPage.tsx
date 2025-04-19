@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import api from '../api/api';
 import { useAuth } from '../context/AuthContext';
-import api from '../services/api';
-import { RegisterData } from '../types/api';
+import { RegisterData } from '../types/api.types';
 
 export const RegisterPage: React.FC = () => {
 	const [formData, setFormData] = useState<RegisterData>({

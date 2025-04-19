@@ -1,7 +1,7 @@
-import { News } from '../types/api';
+import { Posts } from '../types/api.types';
 
 interface PostCardProps {
-	post: News;
+	post: Posts;
 }
 
 export const PostCard: React.FC<PostCardProps> = ({ post }) => {

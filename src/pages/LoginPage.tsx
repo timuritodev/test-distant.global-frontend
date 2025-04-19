@@ -1,8 +1,8 @@
+import api from '@/api/api';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import api from '../services/api';
-import { LoginCredentials } from '../types/api';
+import { LoginCredentials } from '../types/api.types';
 
 export const LoginPage: React.FC = () => {
 	const [credentials, setCredentials] = useState<LoginCredentials>({
