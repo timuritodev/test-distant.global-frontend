@@ -2,7 +2,6 @@ import api from '@/api/api';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Editor } from '../components/Editor';
-import { Preview } from '../components/Preview';
 import { useAuth } from '../context/AuthContext';
 
 export const CreatePostPage: React.FC = () => {
@@ -13,8 +12,7 @@ export const CreatePostPage: React.FC = () => {
 	const navigate = useNavigate();
 	const { token } = useAuth();
 
-	const handleSubmit = async (e: React.FormEvent) => {
-		e.preventDefault();
+	const handleSubmit = async (formData: FormData) => {
 		if (!token) {
 			setError('Требуется авторизация');
 			return;
@@ -22,7 +20,8 @@ export const CreatePostPage: React.FC = () => {
 		try {
 			setLoading(true);
 			setError(null);
-			await api.news.create({ title, content });
+			formData.append('title', title);
+			await api.news.create(formData);
 			navigate('/');
 		} catch (err) {
 			console.error('Ошибка при создании поста:', err);
@@ -45,26 +44,22 @@ export const CreatePostPage: React.FC = () => {
 		<div className="create-post">
 			<h2>Создать новый пост</h2>
 			{error && <div className="error">{error}</div>}
-			<form onSubmit={handleSubmit}>
-				<div className="form-group">
-					<label htmlFor="title">Заголовок</label>
-					<input
-						id="title"
-						type="text"
-						value={title}
-						onChange={(e) => setTitle(e.target.value)}
-						required
-						disabled={loading}
-					/>
-				</div>
-				<div className="editor-preview">
-					<Editor value={content} onChange={setContent} />
-					<Preview content={content} />
-				</div>
-				<button type="submit" disabled={loading}>
-					{loading ? 'Публикация...' : 'Опубликовать'}
-				</button>
-			</form>
+			<div className="form-group">
+				<label htmlFor="title">Заголовок</label>
+				<input
+					id="title"
+					type="text"
+					value={title}
+					onChange={(e) => setTitle(e.target.value)}
+					required
+					disabled={loading}
+				/>
+			</div>
+			<Editor
+				value={content}
+				onChange={setContent}
+				onSubmit={handleSubmit}
+			/>
 		</div>
 	);
 }; 

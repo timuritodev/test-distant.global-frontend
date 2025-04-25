@@ -28,33 +28,32 @@ const api = {
 			const response = await axiosInstance.get<Posts[]>('/api/news');
 			return response.data;
 		},
-		create: async (newsData: PostsCreateData): Promise<Posts> => {
-			const response = await axiosInstance.post<Posts>('/api/news', newsData);
+		create: async (formData: FormData): Promise<Posts> => {
+			const response = await axiosInstance.post<Posts>('/api/news', formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data'
+				}
+			});
 			return response.data;
 		},
-		uploadImages: async (files: File[]): Promise<string[]> => {
-			const formData = new FormData();
-			files.forEach(file => {
-				formData.append('images', file);
-			});
-			const response = await axiosInstance.post<{ paths: string[] }>('/api/news/upload/images', formData, {
-				headers: {
-					'Content-Type': 'multipart/form-data'
-				}
-			});
-			return response.data.paths;
+		edit: async (id: string, data: Partial<PostsCreateData>): Promise<Posts> => {
+			const response = await axiosInstance.put<Posts>(`/api/news/${id}`, data);
+			return response.data;
 		},
-		uploadAttachments: async (files: File[]): Promise<string[]> => {
-			const formData = new FormData();
-			files.forEach(file => {
-				formData.append('attachments', file);
-			});
-			const response = await axiosInstance.post<{ paths: string[] }>('/api/news/upload/attachments', formData, {
-				headers: {
-					'Content-Type': 'multipart/form-data'
-				}
-			});
-			return response.data.paths;
+		delete: async (id: string): Promise<void> => {
+			await axiosInstance.delete(`/api/news/${id}`);
+		},
+		publish: async (id: string): Promise<Posts> => {
+			const response = await axiosInstance.post<Posts>(`/api/news/${id}/publish`);
+			return response.data;
+		},
+		getById: async (id: string): Promise<Posts> => {
+			const response = await axiosInstance.get<Posts>(`/api/news/${id}`);
+			return response.data;
+		},
+		getMyNews: async (): Promise<Posts[]> => {
+			const response = await axiosInstance.get<Posts[]>('/api/news/my');
+			return response.data;
 		}
 	},
 };

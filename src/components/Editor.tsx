@@ -1,47 +1,28 @@
 import React, { useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
-import api from '../api/api';
 
 interface EditorProps {
 	value: string;
 	onChange: (value: string) => void;
-	onImagesUpload?: (paths: string[]) => void;
-	onAttachmentsUpload?: (paths: string[]) => void;
+	onSubmit?: (formData: FormData) => Promise<void>;
 }
 
-export const Editor: React.FC<EditorProps> = ({ value, onChange, onImagesUpload, onAttachmentsUpload }) => {
+export const Editor: React.FC<EditorProps> = ({ value, onChange, onSubmit }) => {
 	const imageInputRef = useRef<HTMLInputElement>(null);
 	const fileInputRef = useRef<HTMLInputElement>(null);
+	const [selectedImages, setSelectedImages] = React.useState<File[]>([]);
+	const [selectedAttachments, setSelectedAttachments] = React.useState<File[]>([]);
 
 	const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (!e.target.files?.length) return;
-		try {
-			const paths = await api.news.uploadImages(Array.from(e.target.files));
-			if (onImagesUpload) {
-				onImagesUpload(paths);
-			}
-			const imageMarkdown = paths.map(path => `![image](${path})`).join('\n');
-			onChange(value + '\n' + imageMarkdown);
-		} catch (err) {
-			console.error('Ошибка при загрузке изображений:', err);
-		}
+		const files = Array.from(e.target.files);
+		setSelectedImages(prev => [...prev, ...files]);
 	};
 
 	const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (!e.target.files?.length) return;
-		try {
-			const paths = await api.news.uploadAttachments(Array.from(e.target.files));
-			if (onAttachmentsUpload) {
-				onAttachmentsUpload(paths);
-			}
-			const filesMarkdown = paths.map(path => {
-				const fileName = path.split('/').pop() || 'file';
-				return `[${fileName}](${path})`;
-			}).join('\n');
-			onChange(value + '\n' + filesMarkdown);
-		} catch (err) {
-			console.error('Ошибка при загрузке файлов:', err);
-		}
+		const files = Array.from(e.target.files);
+		setSelectedAttachments(prev => [...prev, ...files]);
 	};
 
 	const insertMarkdown = (template: string) => {
@@ -55,6 +36,30 @@ export const Editor: React.FC<EditorProps> = ({ value, onChange, onImagesUpload,
 			template.replace('$1', selectedText) +
 			value.substring(end);
 		onChange(newText);
+	};
+
+	const handleSubmit = async () => {
+		if (!onSubmit) return;
+
+		const formData = new FormData();
+		formData.append('content', value);
+
+		selectedImages.forEach((file) => {
+			formData.append('images', file);
+		});
+
+		selectedAttachments.forEach((file) => {
+			formData.append('attachments', file);
+		});
+
+		try {
+			await onSubmit(formData);
+			setSelectedImages([]);
+			setSelectedAttachments([]);
+		} catch (err) {
+			console.error('Ошибка при создании новости:', err);
+			throw err;
+		}
 	};
 
 	return (
@@ -74,6 +79,22 @@ export const Editor: React.FC<EditorProps> = ({ value, onChange, onImagesUpload,
 				onChange={(e) => onChange(e.target.value)}
 				placeholder="Введите текст статьи (поддерживается Markdown)..."
 			/>
+			{selectedImages.length > 0 && (
+				<div className="selected-files">
+					<h4>Выбранные изображения:</h4>
+					{selectedImages.map((file, index) => (
+						<div key={index}>{file.name}</div>
+					))}
+				</div>
+			)}
+			{selectedAttachments.length > 0 && (
+				<div className="selected-files">
+					<h4>Выбранные файлы:</h4>
+					{selectedAttachments.map((file, index) => (
+						<div key={index}>{file.name}</div>
+					))}
+				</div>
+			)}
 			<input
 				type="file"
 				ref={imageInputRef}
@@ -94,6 +115,14 @@ export const Editor: React.FC<EditorProps> = ({ value, onChange, onImagesUpload,
 				<h3>Предпросмотр:</h3>
 				<ReactMarkdown>{value}</ReactMarkdown>
 			</div>
+			<button
+				type="button"
+				onClick={handleSubmit}
+				className="submit-button"
+				disabled={!value.trim()}
+			>
+				Отправить
+			</button>
 		</div>
 	);
 }; 
