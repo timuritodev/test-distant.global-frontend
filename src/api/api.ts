@@ -32,16 +32,30 @@ const api = {
 			const response = await axiosInstance.post<Posts>('/api/news', newsData);
 			return response.data;
 		},
-		uploadImage: async (file: File): Promise<{ url: string }> => {
+		uploadImages: async (files: File[]): Promise<string[]> => {
 			const formData = new FormData();
-			formData.append('file', file);
-			const response = await axiosInstance.post<{ url: string }>('/api/news/upload', formData, {
+			files.forEach(file => {
+				formData.append('images', file);
+			});
+			const response = await axiosInstance.post<{ paths: string[] }>('/api/news/upload/images', formData, {
 				headers: {
 					'Content-Type': 'multipart/form-data'
 				}
 			});
-			return response.data;
+			return response.data.paths;
 		},
+		uploadAttachments: async (files: File[]): Promise<string[]> => {
+			const formData = new FormData();
+			files.forEach(file => {
+				formData.append('attachments', file);
+			});
+			const response = await axiosInstance.post<{ paths: string[] }>('/api/news/upload/attachments', formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data'
+				}
+			});
+			return response.data.paths;
+		}
 	},
 };
 
