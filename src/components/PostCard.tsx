@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
+import { Link } from 'react-router-dom';
 import api from '../api/api';
 import { useAuth } from '../context/AuthContext';
-import '../styles/PostCard.css';
 import { Posts } from '../types/api.types';
 
 interface PostCardProps {
@@ -15,9 +15,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onUpdate }) => {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 
-	const isAuthor = user && (
-		(typeof post.author === 'object' && (user._id === post.author._id || user._id === post.author._id))
-	);
+	const isAuthor = user && (typeof post.author === 'string' ? post.author === user._id : post.author._id === user._id);
 
 	const handlePublish = async () => {
 		try {
@@ -61,6 +59,31 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onUpdate }) => {
 				{post.status === 'published' ? 'Опубликовано' : 'Черновик'}
 			</div>
 			<h2>{post.title}</h2>
+			<div className="post-meta">
+				<span>Автор: {typeof post.author === 'string' ? post.author : post.author.username}</span>
+				<span>Дата: {new Date(post.createdAt).toLocaleDateString()}</span>
+			</div>
+			{isAuthor && (
+				<div className="post-actions">
+					<Link to={`/edit/${post._id}`} className="edit-button">
+						Редактировать
+					</Link>
+					<button
+						className="publish-button"
+						onClick={handlePublish}
+						disabled={loading}
+					>
+						{loading ? 'Публикация...' : 'Опубликовать'}
+					</button>
+					<button
+						className="delete-button"
+						onClick={handleDelete}
+						disabled={loading}
+					>
+						Удалить
+					</button>
+				</div>
+			)}
 			<div className="post-content">
 				<ReactMarkdown>{post.content}</ReactMarkdown>
 			</div>
@@ -81,28 +104,6 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onUpdate }) => {
 				</div>
 			)}
 			{error && <div className="error">{error}</div>}
-			{isAuthor && post.status === 'draft' && (
-				<div className="post-actions">
-					<button
-						className="publish-button"
-						onClick={handlePublish}
-						disabled={loading}
-					>
-						{loading ? 'Публикация...' : 'Опубликовать'}
-					</button>
-					<button
-						className="delete-button"
-						onClick={handleDelete}
-						disabled={loading}
-					>
-						Удалить
-					</button>
-				</div>
-			)}
-			<div className="post-meta">
-				<span>Автор: {typeof post.author === 'object' ? post.author.username : 'Неизвестный'}</span>
-				<span>Дата: {new Date(post.createdAt).toLocaleDateString()}</span>
-			</div>
 		</div>
 	);
 }; 

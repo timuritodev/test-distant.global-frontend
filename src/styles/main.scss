@@ -690,3 +690,49 @@ main {
 .delete-button:hover {
 	background-color: #da190b;
 }
+
+.edit-button {
+	background-color: #3290cf;
+	color: white;
+	padding: 8px 16px;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 14px;
+	text-decoration: none;
+}
+
+.edit-button:hover {
+	background-color: #3974a1;
+}
+
+.editor-textarea {
+	width: 80%;
+	min-height: 300px;
+	padding: 1rem;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+}
+
+.publish-date {
+	margin: 15px 0;
+}
+
+.publish-date label {
+	display: block;
+	margin-bottom: 8px;
+	color: #666;
+}
+
+.publish-date input {
+	width: 100%;
+	padding: 8px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	font-size: 14px;
+}
+
+.publish-date input:focus {
+	outline: none;
+	border-color: #4a90e2;
+}

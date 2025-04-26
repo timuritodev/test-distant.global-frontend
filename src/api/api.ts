@@ -37,7 +37,7 @@ const api = {
 			return response.data;
 		},
 		edit: async (id: string, data: Partial<PostsCreateData>): Promise<Posts> => {
-			const response = await axiosInstance.put<Posts>(`/api/news/${id}`, data);
+			const response = await axiosInstance.patch<Posts>(`/api/news/${id}`, data);
 			return response.data;
 		},
 		delete: async (id: string): Promise<void> => {

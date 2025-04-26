@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 
 interface EditorProps {
@@ -12,6 +12,7 @@ export const Editor: React.FC<EditorProps> = ({ value, onChange, onSubmit }) => 
 	const fileInputRef = useRef<HTMLInputElement>(null);
 	const [selectedImages, setSelectedImages] = React.useState<File[]>([]);
 	const [selectedAttachments, setSelectedAttachments] = React.useState<File[]>([]);
+	const [publishAt, setPublishAt] = useState<string>('');
 
 	const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (!e.target.files?.length) return;
@@ -44,6 +45,10 @@ export const Editor: React.FC<EditorProps> = ({ value, onChange, onSubmit }) => 
 		const formData = new FormData();
 		formData.append('content', value);
 
+		if (publishAt) {
+			formData.append('publishAt', publishAt);
+		}
+
 		selectedImages.forEach((file) => {
 			formData.append('images', file);
 		});
@@ -56,6 +61,7 @@ export const Editor: React.FC<EditorProps> = ({ value, onChange, onSubmit }) => 
 			await onSubmit(formData);
 			setSelectedImages([]);
 			setSelectedAttachments([]);
+			setPublishAt('');
 		} catch (err) {
 			console.error('Ошибка при создании новости:', err);
 			throw err;
@@ -74,7 +80,18 @@ export const Editor: React.FC<EditorProps> = ({ value, onChange, onSubmit }) => 
 				<button type="button" onClick={() => imageInputRef.current?.click()}>Image</button>
 				<button type="button" onClick={() => fileInputRef.current?.click()}>File</button>
 			</div>
+			<div className="publish-date">
+				<label htmlFor="publishAt">Дата публикации (необязательно):</label>
+				<input
+					type="datetime-local"
+					id="publishAt"
+					value={publishAt}
+					onChange={(e) => setPublishAt(e.target.value)}
+					min={new Date().toISOString().slice(0, 16)}
+				/>
+			</div>
 			<textarea
+				className="editor-textarea"
 				value={value}
 				onChange={(e) => onChange(e.target.value)}
 				placeholder="Введите текст статьи (поддерживается Markdown)..."

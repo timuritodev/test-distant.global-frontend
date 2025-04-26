@@ -37,6 +37,7 @@ export interface PostsCreateData {
 	content: string;
 	images?: string[];
 	attachments?: string[];
+	publishAt?: string;
 }
 
 export interface Notification {
