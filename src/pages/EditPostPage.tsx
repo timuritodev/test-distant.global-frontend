@@ -34,7 +34,7 @@ export const EditPostPage: React.FC = () => {
 		fetchPost();
 	}, [id]);
 
-	const handleSubmit = async (formData: FormData) => {
+	const handleSubmit = async () => {
 		if (!token || !id) {
 			setError('Требуется авторизация');
 			return;
