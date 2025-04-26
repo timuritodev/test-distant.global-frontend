@@ -39,7 +39,7 @@ export const HomePage: React.FC = () => {
 			<h1>Новости</h1>
 			<div className="posts-grid">
 				{posts.map((post) => (
-					<PostCard key={post._id} post={post} />
+					<PostCard key={post._id} post={post} onUpdate={loadPosts} />
 				))}
 			</div>
 		</div>

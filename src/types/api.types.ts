@@ -8,7 +8,7 @@ export interface Posts {
 	_id: string;
 	title: string;
 	content: string;
-	author: User;
+	author: User | string;
 	status: 'published' | 'draft';
 	images: string[];
 	attachments: string[];
