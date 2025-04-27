@@ -18,17 +18,6 @@ export const Notifications: React.FC = () => {
 		}
 	}, [notifications]);
 
-	const addNotification = (message: string, type: Notification['type']) => {
-		setNotifications((prev) => [
-			...prev,
-			{
-				id: Date.now(),
-				message,
-				type,
-			},
-		]);
-	};
-
 	return (
 		<div className="notifications">
 			{notifications.map((notification) => (

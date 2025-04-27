@@ -17,6 +17,8 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onUpdate }) => {
 
 	const isAuthor = user && (typeof post.author === 'string' ? post.author === user._id : post.author._id === user._id);
 
+	console.log(isAuthor);
+
 	const handlePublish = async () => {
 		try {
 			setLoading(true);
@@ -58,11 +60,6 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onUpdate }) => {
 			<div className={`post-status ${post.status}`}>
 				{post.status === 'published' ? 'Опубликовано' : 'Черновик'}
 			</div>
-			<h2>{post.title}</h2>
-			<div className="post-meta">
-				<span>Автор: {typeof post.author === 'string' ? post.author : post.author.username}</span>
-				<span>Дата: {new Date(post.createdAt).toLocaleDateString()}</span>
-			</div>
 			{isAuthor && (
 				<div className="post-actions">
 					<Link to={`/edit/${post._id}`} className="edit-button">
@@ -84,6 +81,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onUpdate }) => {
 					</button>
 				</div>
 			)}
+			<h2>{post.title}</h2>
 			<div className="post-content">
 				<ReactMarkdown>{post.content}</ReactMarkdown>
 			</div>
@@ -104,6 +102,10 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onUpdate }) => {
 				</div>
 			)}
 			{error && <div className="error">{error}</div>}
+			<div className="post-meta">
+				<span>Автор: {typeof post.author === 'string' ? post.author : post.author.username}</span>
+				<span>Дата: {new Date(post.createdAt).toLocaleDateString()}</span>
+			</div>
 		</div>
 	);
 }; 

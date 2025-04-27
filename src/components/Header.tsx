@@ -1,33 +1,36 @@
-import { Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { AuthContext, AuthContextType } from '../context/AuthContext';
 import { NotificationBell } from './NotificationBell';
 
 export const Header: React.FC = () => {
-	const { user, logout } = useAuth();
+	const { user, token, logout } = useContext(AuthContext) as AuthContextType;
+	const navigate = useNavigate();
+
+	const handleLogout = () => {
+		logout();
+		navigate('/');
+	};
 
 	return (
-		<header className="header">
-			<div className="header-container">
-				<Link to="/" className="logo">
-					Новости
-				</Link>
-				<nav className="nav">
-					{user ? (
+		<header>
+			<nav>
+				<Link to='/'>Главная</Link>
+				<Link to='/create'>Создать пост</Link>
+				<div className='user-info-container'>
+					<NotificationBell />
+					{token ? (
 						<>
-							<Link to="/create">Создать статью</Link>
-							<NotificationBell />
-							<button onClick={logout} className="logout-button">
-								Выйти
-							</button>
+							<div className='user-info'>
+								<span>{user?.username}</span>
+								<button onClick={handleLogout}>Выйти</button>
+							</div>
 						</>
 					) : (
-						<>
-							<Link to="/login">Войти</Link>
-							<Link to="/register">Регистрация</Link>
-						</>
+						<Link to='/login'>Войти</Link>
 					)}
-				</nav>
-			</div>
+				</div>
+			</nav>
 		</header>
 	);
-};
+}

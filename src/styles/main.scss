@@ -7,7 +7,7 @@ $success-color: #52c41a;
 .app-container {
 	font-family: $app-font;
 	background: $app-bg;
-	min-height: 100vh;
+	min-height: 95vh;
 	display: flex;
 	flex-direction: column;
 }
@@ -516,7 +516,7 @@ main {
 		flex-wrap: wrap;
 
 		img {
-			max-width: 100px;
+			max-width: 300px;
 			height: auto;
 			border-radius: 4px;
 		}
@@ -661,7 +661,7 @@ main {
 .post-actions {
 	display: flex;
 	gap: 10px;
-	margin-top: 15px;
+	margin: 0 0 15px 0;
 }
 
 .post-actions button {
@@ -707,7 +707,7 @@ main {
 }
 
 .editor-textarea {
-	width: 80%;
+	width: 95%;
 	min-height: 300px;
 	padding: 1rem;
 	border: 1px solid #ddd;
@@ -827,4 +827,9 @@ main {
 	padding: 20px;
 	text-align: center;
 	color: #666;
+}
+
+.user-info-container {
+	display: flex;
+	gap: 10px;
 }
