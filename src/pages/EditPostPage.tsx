@@ -19,7 +19,7 @@ export const EditPostPage: React.FC = () => {
 		const fetchPost = async () => {
 			if (!id) return;
 			try {
-				const data = await api.news.getById(id);
+				const data = await api.posts.getById(id);
 				setPost(data);
 				setTitle(data.title);
 				setContent(data.content);
@@ -42,7 +42,7 @@ export const EditPostPage: React.FC = () => {
 		try {
 			setLoading(true);
 			setError(null);
-			await api.news.edit(id, {
+			await api.posts.edit(id, {
 				title,
 				content,
 			});

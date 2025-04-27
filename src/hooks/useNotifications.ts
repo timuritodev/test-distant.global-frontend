@@ -6,7 +6,7 @@ export default function useNotifications() {
 	const [list, setList] = useState<Notification[]>([]);
 	useEffect(() => {
 		const socket = io(API_BASE);
-		socket.on('newsEvent', (data: Notification) => {
+		socket.on('postsEvent', (data: Notification) => {
 			setList(prev => [data, ...prev]);
 		});
 		const cleanup = () => {

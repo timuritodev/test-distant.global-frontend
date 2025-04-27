@@ -15,7 +15,7 @@ export const HomePage: React.FC = () => {
 	const loadPosts = async () => {
 		try {
 			setLoading(true);
-			const data = await api.news.getAll();
+			const data = await api.posts.getAll();
 			setPosts(data);
 			setError(null);
 		} catch (err) {

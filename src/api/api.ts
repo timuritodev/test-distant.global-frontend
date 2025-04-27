@@ -23,13 +23,13 @@ const api = {
 			return response.data;
 		},
 	},
-	news: {
+	posts: {
 		getAll: async (): Promise<Posts[]> => {
-			const response = await axiosInstance.get<Posts[]>('/api/news');
+			const response = await axiosInstance.get<Posts[]>('/api/posts');
 			return response.data;
 		},
 		create: async (formData: FormData): Promise<Posts> => {
-			const response = await axiosInstance.post<Posts>('/api/news', formData, {
+			const response = await axiosInstance.post<Posts>('/api/posts', formData, {
 				headers: {
 					'Content-Type': 'multipart/form-data'
 				}
@@ -37,22 +37,22 @@ const api = {
 			return response.data;
 		},
 		edit: async (id: string, data: Partial<PostsCreateData>): Promise<Posts> => {
-			const response = await axiosInstance.patch<Posts>(`/api/news/${id}`, data);
+			const response = await axiosInstance.patch<Posts>(`/api/posts/${id}`, data);
 			return response.data;
 		},
 		delete: async (id: string): Promise<void> => {
-			await axiosInstance.delete(`/api/news/${id}`);
+			await axiosInstance.delete(`/api/posts/${id}`);
 		},
 		publish: async (id: string): Promise<Posts> => {
-			const response = await axiosInstance.post<Posts>(`/api/news/${id}/publish`);
+			const response = await axiosInstance.post<Posts>(`/api/posts/${id}/publish`);
 			return response.data;
 		},
 		getById: async (id: string): Promise<Posts> => {
-			const response = await axiosInstance.get<Posts>(`/api/news/${id}`);
+			const response = await axiosInstance.get<Posts>(`/api/posts/${id}`);
 			return response.data;
 		},
-		getMyNews: async (): Promise<Posts[]> => {
-			const response = await axiosInstance.get<Posts[]>('/api/news/my');
+		getMyPosts: async (): Promise<Posts[]> => {
+			const response = await axiosInstance.get<Posts[]>('/api/posts/my');
 			return response.data;
 		}
 	},

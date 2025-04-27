@@ -7,7 +7,7 @@ interface Notification {
 	message: string;
 	createdAt: string;
 	read: boolean;
-	newsId?: string;
+	postsId?: string;
 }
 
 interface NotificationContextType {

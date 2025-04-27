@@ -21,7 +21,7 @@ export const CreatePostPage: React.FC = () => {
 			setLoading(true);
 			setError(null);
 			formData.append('title', title);
-			await api.news.create(formData);
+			await api.posts.create(formData);
 			navigate('/');
 		} catch (err) {
 			console.error('Ошибка при создании поста:', err);

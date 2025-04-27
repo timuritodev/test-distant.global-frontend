@@ -21,7 +21,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onUpdate }) => {
 		try {
 			setLoading(true);
 			setError(null);
-			await api.news.publish(post._id);
+			await api.posts.publish(post._id);
 			if (onUpdate) {
 				onUpdate();
 			}
@@ -41,7 +41,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onUpdate }) => {
 		try {
 			setLoading(true);
 			setError(null);
-			await api.news.delete(post._id);
+			await api.posts.delete(post._id);
 			if (onUpdate) {
 				onUpdate();
 			}
